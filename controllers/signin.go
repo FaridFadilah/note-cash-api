@@ -24,10 +24,10 @@ func Authentication(c *fiber.Ctx) error {
 	db.Table("users").Where("\"email\"=?", user.Email).Select("id", "uuid", "fullName", "email", "password").First(&userDb)
 
 	if userDb.ID == 0{
-		log.Println("Email doesnt exists")
+		log.Println("Email & password invalid")
 		return c.Status(fiber.StatusBadRequest).JSON(map[string]interface{}{
 			"status"	: false,
-			"message"	:	"Email doesnt exists", 
+			"message"	:	"Email & password invalid", 
 			"Data"		: nil,
 		})
 	}
@@ -60,6 +60,11 @@ func Authentication(c *fiber.Ctx) error {
 	return c.JSON(map[string]interface{}{
 		"status": true,
 		"message": "Success",
-		"data": userDb,
+		"data": map[string]interface{}{
+			"name": userDb.FullName,
+			"email": userDb.Email,
+			"kind": userDb.Role,
+			"token": userToken.Token,
+		},
 	})
 }

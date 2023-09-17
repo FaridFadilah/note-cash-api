@@ -13,7 +13,7 @@ func ConnectDB() *gorm.DB {
 		panic(err.Error())
 	}
 
-	db.AutoMigrate(&ReportTransaction{}, &AuthToken{}, &User{})
+	db.AutoMigrate(&ReportTransaction{}, &AuthToken{}, &User{}, &Wallet{})
 
 	return db
 }
